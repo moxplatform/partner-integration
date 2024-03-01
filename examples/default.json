@@ -1,0 +1,28 @@
+{
+    "logConfig": {
+        "logFolder": "./logs/",
+        "logInfoFile": "info-%DATE%.log",
+        "logErrorFile":  "error-%DATE%.log",
+        "logSqlQueries": true
+    },
+    "tableConfig": {
+        "pidColumn": "phone,email",
+        "pidIsHashed": false,
+        "userIdColumn": "id",
+        "categoryTableConfig": {
+            "tableName": "category_table",
+            "idCol": "category_id",
+            "nameCol": "category_name"
+        },
+        "categoryMappingTableConfig": {
+            "tableName": "category_mapping",
+            "userIdCol": "user_id",
+            "categoryIdCol": "category_id"
+        },
+        "isoDateColumn": ["dob", "last_modified"]
+    },
+    "zkpConfig" : {
+        "enable": false,
+        "proofBatchSize" : 8
+    }
+}
