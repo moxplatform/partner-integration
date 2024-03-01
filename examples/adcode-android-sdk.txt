@@ -1,0 +1,47 @@
+// AdCode example snippet using the adzerk android sdk 
+//
+// Please see the sdk here https://github.com/adzerk/adzerk-android-sdk/
+
+
+implementation 'com.adzerk:sdk:2.3.+'
+
+AdzerkSdk sdk = new AdzerkSdk.Builder()
+	.networkId(11396L)
+	.hostname("partners.moxplatform.com")
+	.build();
+
+// fill in values here from UI in Profile > Get Ad Tag
+long siteId = ;
+long adTypes = ;
+long zoneIds = ;
+String lang = "en";   // language iso code "zh", "zh_TW" etc
+tring hashedUserId = ; // if email / phone available, otherwise skip setUser() call
+ 
+Request request = new Request.Builder()
+      .addPlacement(new Placement("div1", siteId, adTypes).addZoneIds(zoneIds))
+//    .addPlacement(new Placement("div2", siteId, <ad_types...>).addZoneIds(zoneIds))
+      .setUrl(currentPageURL)               // optional
+      .setUser(new User(hashedUserId))		// if user is logged in
+      .addKeywords(keywords)			// if there are keywords available
+	 .addAdditionalOption("language", lang)
+	 .setMobile(true)
+      .build();
+
+sdk.requestPlacement(request, listener);
+
+// listener
+@Override
+public void success(Response response) {
+    Decision decision = response.getDecisions("div1").get(0);
+    Content content = decision.getContents().get(0)
+    string imgUrl = content.getImageUrl()
+    // or Map<String, Object> content.getCreativeData() 
+
+    // Impression pixel; fire when user sees the ad
+    String impUrl = decision.getImpressionUrl();
+    sdk.firePixel(impUrl, listener);
+
+    // Click pixel; fire when user clicks on the ad
+    String clickUrl = decision.getClickUrl();
+    sdk.firePixel(clickUrl, listener);
+
