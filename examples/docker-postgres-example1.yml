@@ -1,0 +1,21 @@
+version: '3'
+services:
+  mox:
+    image: moxplatform/unique-id:beta
+    expose:
+      - 3001
+    network_mode: host
+    volumes:
+     - /home/ec2-user/mox:/app/config
+     - /home/ec2-user/mox/logs:/app/logs
+    environment:
+     - DB_TYPE=postgres
+     - DBUSER=moxuser
+     - HOST=localhost
+     - DATABASE=userdb
+     - PASSWORD=123456
+     - DB_PORT=5432
+     - TABLE_NAME=users
+     - API_PORT=3001
+     - PRIVATE_KEY_PATH=/app/config/private.key
+
