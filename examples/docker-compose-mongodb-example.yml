@@ -1,0 +1,17 @@
+version: '3'
+services:
+  mox:
+    image: vinayverismart/mox:beta
+
+    expose:
+      - 3001
+    network_mode: host
+    volumes:
+      - /home/ec2-user/mox/mongo:/app/config
+      - /home/ec2-user/mox/logs:/app/logs
+    environment:
+      - DB_TYPE=mongodb
+      - PRIVATE_KEY_PATH=/app/config/private.key
+      - DATABASE_URL=mongodb://localhost:27017/mox
+      - TABLE_NAME=users
+      - API_PORT=3005
