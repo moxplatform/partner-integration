@@ -18,7 +18,7 @@ async function hashEmail(email) {
 }
 
 
-async function decisionTest(net, site, zone, types,   email, ip, url, kw) {
+async function decisionTest(net, site, zone, types,   email, ip, url, kw, props) {
 
 	// hash email/phone if avail
 	const hash = email ? await hashEmail(email) : null
@@ -37,6 +37,8 @@ async function decisionTest(net, site, zone, types,   email, ip, url, kw) {
 	  url,
 	  keywords: kw
 	};
+	
+	if (hash && props) client.userDb.setCustomProperties(hash, props, net)
 
 	const options = {
 // 	  includeExplanation: true,
@@ -53,6 +55,7 @@ async function decisionTest(net, site, zone, types,   email, ip, url, kw) {
 		  // or the whole list response.decisions.div0 for multiple ads 
 		  // 
 		  // see ad info in 'contents' - either use data.imageUrl with clickUrl, or the html code from 'body'
+		  //  See documentation here on different formats: https://dev.kevel.com/reference/response 
 		  // and make sure to fire the impressionUrl tracking pixel when the ad was shown
 
 		  const d = response.decisions.div0[0]
@@ -68,7 +71,12 @@ async function decisionTest(net, site, zone, types,   email, ip, url, kw) {
 
 // Example using phone number. make sure to replace values (site, zone, types) with your data 
 //  from the Ad-Code page in profile! 
-// Also please pass in the user's IP address for country targeting, and the URL for tracking. Keywords are optional.
+// Also please pass in the user's IP address for country targeting, and the URL for tracking. 
+// Keywords and additional properties are optional but helpful for ad-targeting.
 
 decisionTest(11396, 1272586, 304847, [4, 10, 5], 
-   "+44849463221", "60.111.35.98", "https://page/for//tracking", ["optional-keyword1", "keyword2"])
+   "+44849463221", "60.111.35.98", "https://page/for//tracking", 
+   ["optional-keyword1", "keyword2"], 
+   {language: 'en', gender: 'm'})
+
+
