@@ -58,4 +58,4 @@ async function decisionTest(email, net, site, zone, types, kw) {
 }
 
 
-decisionTest("+44849463221", 11326, 1263050, 300304, [10, 5], ["optional-keyword1", "keyword2"])
+decisionTest("+44849463221", 11396, 1272586, 304847, [4, 10, 5], ["optional-keyword1", "keyword2"])
