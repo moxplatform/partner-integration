@@ -1,3 +1,8 @@
+// MOX platform - server side (node.js) ad-code example using the decision sdk.
+//  see documentation https://dev.kevel.com/docs/javascript-decision-sdk  and https://dev.kevel.com/reference/request
+//
+// Please make sure to replace the ids with your values from the Ad-Tag settings page in profile!
+
 
 const apiKey = process.env.ADZERK_API_KEY;
 
@@ -13,7 +18,7 @@ async function hashEmail(email) {
 }
 
 
-async function decisionTest(email, net, site, zone, types, kw) {
+async function decisionTest(net, site, zone, types,   email, ip, url, kw) {
 
 	// hash email/phone if avail
 	const hash = email ? await hashEmail(email) : null
@@ -26,7 +31,10 @@ async function decisionTest(email, net, site, zone, types, kw) {
 
 	let request = {
 	  placements: [{ networkId: net, siteId: site, zoneIds: [zone], adTypes: types }],
+	  
 	  user: { key: hash },
+	  ip,
+	  url,
 	  keywords: kw
 	};
 
@@ -43,8 +51,9 @@ async function decisionTest(email, net, site, zone, types, kw) {
 
 		  // send this to client response.decisions.div0[0] 
 		  // or the whole list response.decisions.div0 for multiple ads 
-		  // see ad in contents - either use data.imageUrl with clickUrl, or the html from 'body'
-		  // and  fire the impressionUrl  when image shown
+		  // 
+		  // see ad info in 'contents' - either use data.imageUrl with clickUrl, or the html code from 'body'
+		  // and make sure to fire the impressionUrl tracking pixel when the ad was shown
 
 		  const d = response.decisions.div0[0]
 		  if (d && d.contents && d.contents.length) {
@@ -57,5 +66,9 @@ async function decisionTest(email, net, site, zone, types, kw) {
 	});
 }
 
+// Example using phone number. make sure to replace values (site, zone, types) with your data 
+//  from the Ad-Code page in profile! 
+// Also please pass in the user's IP address for country targeting, and the URL for tracking. Keywords are optional.
 
-decisionTest("+44849463221", 11396, 1272586, 304847, [4, 10, 5], ["optional-keyword1", "keyword2"])
+decisionTest(11396, 1272586, 304847, [4, 10, 5], 
+   "+44849463221", "60.111.35.98", "https://page/for//tracking", ["optional-keyword1", "keyword2"])
